@@ -6,6 +6,9 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "DB_FILE=test/test.db mocha --timeout 30000"
+    "test": "cross-env DB_FILE=test/test.db mocha --timeout 30000"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }

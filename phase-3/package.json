@@ -7,6 +7,9 @@
     "start": "node app.js",
     "dev": "nodemon app.js",
     "reset-files": "node ../test-utils/reset-files.js",
-    "test": "DB_FILE=test/test.db mocha --timeout 5000"
+    "test": "cross-env DB_FILE=test/test.db mocha --timeout 30000"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3"
   }
 }
