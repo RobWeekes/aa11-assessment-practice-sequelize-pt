@@ -19,17 +19,55 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: false,
-        isUppercase: true
+        isUppercase: true,
+        len: [2,2],
       }
     },
     flightNumber: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        isNumeric: true,
+        len: [1,4],
+      }
     },
-    inService: DataTypes.BOOLEAN,
-    maxNumPassengers: DataTypes.INTEGER,
-    currentNumPassengers: DataTypes.INTEGER,
-    firstFlightDate: DataTypes.DATE
+    inService: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    },
+    maxNumPassengers: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        min: 2,
+        max: 853,
+      },
+    },
+    currentNumPassengers: {
+      type: DataTypes.INTEGER,
+      validate: {
+        currentLessThanMax(currNum){
+          if(this.maxNumPassengers < currNum) {
+            throw new Error('Err msg optional');
+          }
+        },
+        checkInService(currNum) {
+          if(this.inService === false && currNum !== null) {
+            throw new Error('currentNumPassengers must be null if inService is false');
+          }
+        },
+        min: 0,
+        max: 853,
+      }
+    },
+    firstFlightDate: {
+      type: DataTypes.DATE,
+      validate: {
+        isAfter: "2019-12-31",    // only allow date strings after a specific date
+        isBefore: "2022-01-01",   // only allow before - non inclusive
+      }
+    }
   }, {
     sequelize,
     modelName: 'Airplane',

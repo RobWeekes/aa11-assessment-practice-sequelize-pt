@@ -10,34 +10,56 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       airlineCode: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       flightNumber: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       inService: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        defaultValue: true,
+        allowNull: false,
       },
       maxNumPassengers: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       currentNumPassengers: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       firstFlightDate: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       }
     });
+
+    await queryInterface.addIndex(
+      'Airplanes',
+      ['airlineCode', 'flightNumber'],
+      {
+        unique: true
+      }
+    )
+
   },
   async down(queryInterface, Sequelize) {
+    await queryInterface.removeIndex(
+      'Airplanes',
+      ['airlineCode', 'flightNumber'],
+    )
+
     await queryInterface.dropTable('Airplanes');
   }
+
 };
